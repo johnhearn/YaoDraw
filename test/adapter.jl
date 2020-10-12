@@ -26,14 +26,13 @@ draw(circuit)
 
 # QFT example
 A(i, j) = control(i, j=>shift(2π/(1<<(i-j+1))))
-B(n, k) = chain(n, [j==k ? put(k=>H) : A(j, k) for j in k:n if j!=k]...)
+B(n, k) = chain(n, [j==k ? put(k=>H) : A(j, k) for j in k:n]...)
 qft(n) = chain([B(n, k) for k in 1:n]...)
 
-draw(chain(3, qft(3)))
+draw(chain(4, qft(4)))
 
-qft(2)
+#dump_gate(control(2, 1, 2=>shift(2π/4)))
 
-dump_gate(control(2, 1, 2=>shift(2π/4)))
 
 # Grover's search example
 using LinearAlgebra
@@ -51,52 +50,3 @@ Uf = oracle(0b1101)
 repeating_circuit = chain(n, Uf, gen, reflect0, gen)
 grovers = chain(n, gen, repeating_circuit)
 draw(grovers)
-
-
-
-draw(chain(n, control(n, -collect(1:n-1), n=>-Z)))
-
-draw(chain(n, gen, repeating_circuit))
-
-reflect0 = chain(n, 
-    repeat(n, X), 
-    control(n, -collect(1:n-1), n=>Z), 
-    repeat(n, X))
-
-draw(reflect0)
-
-repeating_circuit = chain(n, Uf, gen, reflect0, gen)
-draw(chain(n, repeating_circuit))
-
-mat(reflect0) ≈ mat(control(n, -collect(1:n-1), n=>-Z))
-
-draw(1, control(n, -collect(1:n-1), n=>-X))
-
-Scale{Val{-1},1,XGate} <: Scale{Val{-1},1,<:ConstantGate{1}}
-
-
-# Battleships example
-# Parameters for the board
-n=2
-bits = n^2 + 1
-ship_locs = [2, 3]
-
-# Define the query circuit
-sqrt(gate::AbstractBlock) = matblock(√mat(X))
-oracle = chain(bits, control(i, bits=>sqrt(X)) for i in ship_locs)
-
-oracle |> draw
-
-gen = chain(repeat(H, 1:bits-1))
-controls = [control(bits, i=>X) for i in 1:bits-1]
-circuit = chain(bits, gen, controls..., oracle, gen)
-
-circuit |> draw
-
-extra = chain(bits, put(bits=>sqrt(Y)), put(bits=>Z))
-oracle2 = chain()
-circuit = chain(bits, gen, controls..., extra, oracle, oracle, gen, put(bits=>sqrt(Y)))
-
-extra |> draw
-
-sqrt(Y)
