@@ -6,8 +6,8 @@ const margin_top = 20
 const margin_right = 10
 const margin_bottom = 20
 
-function draw_circuit(num_bits)
-    Drawing(600, margin_top+num_bits*row_height+margin_bottom, "luxor-drawing-(timestamp).svg")
+function draw_circuit(num_bits; name="circuit.png")
+    Drawing(600, margin_top+num_bits*row_height+margin_bottom, name)
     origin(margin_left, margin_top)
     setopacity(1.0)
     background("white")
