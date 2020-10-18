@@ -29,10 +29,6 @@ function name(shift_gate::ShiftGate{<:Real})
     "R"
 end
 
-function name(matrix_block::GeneralMatrixBlock{1,1,Complex{Float64},Array{Complex{Float64},2}})
-    "√X"
-end
-
 function draw(xoffset, row, const_gate::ConstantGate{1})
     @show const_gate
     draw_gate(name(const_gate), xoffset, row)

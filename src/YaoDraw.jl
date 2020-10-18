@@ -1,9 +1,9 @@
 module YaoDraw
 
 export draw
+include("circuit-graphics.jl")
+include("circuit-adapter.jl")
 
-include("graphics.jl")
-include("adapter.jl")
 include("plots.jl")
 
 end
