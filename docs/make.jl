@@ -8,7 +8,8 @@ makedocs(
     doctest = true,
     sitename = "YaoDraw.jl",
     pages = ["index.md", 
-             "todo.md", 
+             "todo.md",
+             "api.md", 
              "examples.md"],
     format = Documenter.HTML(prettyurls = false)
 )

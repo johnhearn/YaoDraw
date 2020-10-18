@@ -9,6 +9,16 @@ using Yao, YaoDraw, Plots
 default(size=(400, 250))
 ```
 
+## Drawing the Bloch Sphere
+
+Not sure how useful this is but here you have the Bloch sphere with a random state.
+
+```@example draw
+qubit = rand_state(1)
+
+drawBlochSphere(qubit)
+```
+
 ## Preparing the Greenberger–Horne–Zeilinger state
 
 This is taken from the [Yao.jl tutorial](https://tutorials.yaoquantum.org/dev/generated/quick-start/1.prepare-ghz-state/).
