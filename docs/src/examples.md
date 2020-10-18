@@ -5,7 +5,8 @@ Some simple examples.
 ```@setup draw
 push!(LOAD_PATH,"../../src/")
 
-using Yao, YaoDraw
+using Yao, YaoDraw, Plots
+default(size=(400, 250))
 ```
 
 ## Preparing the Greenberger–Horne–Zeilinger state
@@ -13,14 +14,24 @@ using Yao, YaoDraw
 This is taken from the [Yao.jl tutorial](https://tutorials.yaoquantum.org/dev/generated/quick-start/1.prepare-ghz-state/).
 
 ```@example draw
-draw(chain(4,
+circuit = chain(4,
     put(1=>X),
     repeat(H, 2:4),
     control(2, 1=>X),
     control(4, 3=>X),
     control(3, 1=>X),
     control(4, 3=>X),
-    repeat(H, 1:4)))
+    repeat(H, 1:4))
+
+draw(circuit)
+```
+
+```@example draw
+results = zero_state(4) |>
+    circuit |>
+    r -> measure(r, nshots=10000)
+
+plot(results)
 ```
 
 ## Quantum Fourier Transform
@@ -36,6 +47,32 @@ draw(chain(4, qft(4)))
 ```
 
 (It's clear from this that one of the important things missing from YaoDraw is being able to display the rotation angle.)
+
+## A quantum die
+
+And a simple one from [this blog post](https://john-hearn.info/articles/plot-recipe-for-yao-jl) which implements a six-sided die.
+
+```@example draw
+import YaoBlocks.ConstGate.P0
+
+circuit = chain(4,
+    repeat(H, 1:3),
+    control((2,3), 4=>X),
+    put(4=>P0))
+
+draw(circuit)
+```
+
+Shame we can't represent measurement and focusing operations yet :( We can check the die is uniform though.
+
+```@example draw
+results = zero_state(4) |>
+    circuit |>
+    r -> focus!(r, 1:3) |>
+    r -> measure(r, nshots=10000)
+
+plot(results)
+```
 
 ## Grover's search
 
@@ -60,15 +97,13 @@ grovers = chain(n, gen, repeating_circuit)
 draw(grovers)
 ```
 
-## A quantum die
-
-And a simple one from [this blog post](https://john-hearn.info/articles/plot-recipe-for-yao-jl) which implements a six-sided die.
+We can take advantage the Plots.jl package for other things like layout and animation. For example here we see how the algorithm narrows down to the result very quickly.
 
 ```@example draw
-import YaoBlocks.ConstGate.P0
-
-draw(chain(4,
-    repeat(H, 1:3),
-    control((2,3), 4=>X),
-    put(4=>P0)))
+reg = zero_state(n) |> gen
+anim = @animate for i = 1:4
+    reg |> r -> measure(r, nshots=1000) |> plot
+    reg |> repeating_circuit
+end
+gif(anim, "grovers-search.gif", fps = 1)
 ```

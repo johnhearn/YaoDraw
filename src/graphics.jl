@@ -27,7 +27,7 @@ function draw_qubit(row)
     @show voffset
     line(Point(20, voffset-15), Point(20, voffset+15), :stroke)
     fontface("Times")
-    text("0", 24, 8+voffset, halign=:left, valign=:center)
+    Luxor.text("0", 24, 8+voffset, halign=:left, valign=:center)
     line(Point(36, voffset-15), Point(42, voffset), :stroke)
     line(Point(42, voffset), Point(36, voffset+15), :stroke)
     line(Point(50, voffset), Point(600, voffset), :stroke)
@@ -41,7 +41,7 @@ function draw_gate(gate, xoffset, row)
     setcolor("black")
     rect(70+xoffset, 1+yoffset, 30, 30, :stroke)
     fontface("Times Italic")
-    text(gate, 85+xoffset, 24+yoffset, halign=:center, valign=:center)
+    Luxor.text(gate, 85+xoffset, 24+yoffset, halign=:center, valign=:center)
 end
 
 function draw_control_gate(gate, xoffset, row, control_locs, control_config)
@@ -77,6 +77,6 @@ function draw_oracle(gate, xoffset, row, height)
     setcolor("black")
     rect(70+xoffset, 1+yoffset, 40, yheight+30, :stroke)
     fontface("Times Italic")
-    text(gate, 88+xoffset, 24+yoffset+yheight/2, halign=:center, valign=:center)
+    Luxor.text(gate, 88+xoffset, 24+yoffset+yheight/2, halign=:center, valign=:center)
 end
 

@@ -1,7 +1,7 @@
 push!(LOAD_PATH,"../src/")
 
 using Documenter
-using YaoDraw, YaoBlocks
+using YaoDraw
 
 makedocs(
     modules = [YaoDraw],
