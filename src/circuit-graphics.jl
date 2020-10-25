@@ -4,10 +4,10 @@ const row_height = 50
 const margin_left = 10
 const margin_top = 20
 const margin_right = 10
-const margin_bottom = 20
+const margin_bottom = 10
 
-function draw_circuit(num_bits; name="circuit.png")
-    Drawing(600, margin_top+num_bits*row_height+margin_bottom, name)
+function draw_circuit(num_bits, name, width)
+    Drawing(width, margin_top+num_bits*row_height+margin_bottom, name)
     origin(margin_left, margin_top)
     setopacity(1.0)
     background("white")
@@ -24,7 +24,6 @@ function draw_qubit(row)
     setline(1)
     setcolor("black")
     voffset = 15+row_height * (row-1)
-    @show voffset
     line(Point(20, voffset-15), Point(20, voffset+15), :stroke)
     fontface("Times")
     Luxor.text("0", 24, 8+voffset, halign=:left, valign=:center)

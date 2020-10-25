@@ -1,7 +1,7 @@
 using Yao
 
-function draw(chain::ChainBlock{n}) where n
-    draw_circuit(n)
+function draw(chain::ChainBlock{n}; name="circuit.png", width=600) where n
+    draw_circuit(n, name, width)
     draw(0, chain)
     finish()
     preview()
