@@ -46,3 +46,23 @@ Uf = oracle(0b1101)
 repeating_circuit = chain(n, Uf, gen, reflect0, gen)
 grovers = chain(n, gen, repeating_circuit)
 draw(grovers, width=380)
+
+
+# Ansatz circuit 2
+ansatz(n, θs) = chain(n,
+    chain(n, [put(i => Rx(θs[i])) for i in 1:n]),
+    chain(n, [put(i => Rz(θs[i+n])) for i in 1:n]),
+    chain(n, [control(i,i+1 => X) for i in 1:n-1]))
+
+n=4
+draw(ansatz(n, rand(2*n)), width=350)
+
+
+# Diagonalised operator
+P(αs) = chain([ansatz(n, αs[:,i]) for i in 1:size(αs, 2)])
+D(γs) = chain(n, [put(i=>shift(γs[i])) for i in 1:n])
+
+α = rand(2^n, 1)
+γ = rand(n)
+
+draw(chain(P(α), D(γ), P(α)'), width=650)

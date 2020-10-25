@@ -37,13 +37,29 @@ function name(negated_const_gate::Scale{Val{α},1,<:ConstantGate{1}}) where α
     ((α==-1) ? "-" : "$α") * name(negated_const_gate.content)
 end
 
-function name(shift_gate::ShiftGate{<:Real})
-    "R"
+function name(::RotationGate{1,NT,G}) where {NT<:Number,G<:PrimitiveBlock}
+    'R',lowercase(string(G)[1])
+end
+
+function name(::ShiftGate{<:Real})
+    'R','ϕ'
 end
 
 function draw(xoffset, row, const_gate::ConstantGate{1})
     @debug const_gate
     draw_gate(name(const_gate), xoffset, row)
+    50
+end
+
+function draw(xoffset, row, rotation_gate::RotationGate{1,NT,G}) where {NT<:Number,G<:PrimitiveBlock}
+    @debug rotation_gate
+    draw_gate(name(rotation_gate), xoffset, row)
+    50
+end
+
+function draw(xoffset, row, shift_gate::ShiftGate{<:Real})
+    @debug shift_gate
+    draw_gate(name(shift_gate), xoffset, row)
     50
 end
 
@@ -71,6 +87,6 @@ end
 
 function draw(xoffset, matrix_block::GeneralMatrixBlock{M, n, MT}) where {M,n,MT}
     @debug matrix_block
-    draw_oracle("Uf", xoffset, 1, n)
-    60
+    draw_oracle("U", xoffset-5, 1, n)
+    50
 end
