@@ -21,6 +21,7 @@ function draw(xoffset, chain::ChainBlock{n}) where n
             # Overlaps with existing gate so move to next column
             xoff += width
             occupied = occupies
+            draw_wires(xoffset + xoff, n)
             width = draw(xoffset + xoff, block)
         end
         union!(occupied, occupies)

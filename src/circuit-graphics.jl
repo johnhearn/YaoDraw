@@ -14,33 +14,45 @@ function draw_circuit(num_bits, name, width)
     setcolor("black")
 
     fontsize(25)
+    setline(1)
     
     for i in 1:num_bits
-        draw_qubit(i)
+        draw_ket(i)
+    end
+
+    draw_wires(0, n)
+end
+
+yoffset(row) = 15+row_height * (row-1)
+
+function draw_ket(row)
+    y = yoffset(row)
+    setcolor("black")
+    line(Point(20, y-15), Point(20, y+15), :stroke)
+    fontface("Times")
+    Luxor.text("0", 24, 8+y, halign=:left, valign=:center)
+    line(Point(36, y-15), Point(42, y), :stroke)
+    line(Point(42, y), Point(36, y+15), :stroke)
+end
+
+function draw_wires(x, num_bits)
+    xm = 50
+    for row in 1:num_bits
+        y = yoffset(row)
+        setcolor("black")
+        line(Point(xm+x, y), Point(xm+x+50, y), :stroke)
     end
 end
 
-function draw_qubit(row)
-    setline(1)
-    setcolor("black")
-    voffset = 15+row_height * (row-1)
-    line(Point(20, voffset-15), Point(20, voffset+15), :stroke)
-    fontface("Times")
-    Luxor.text("0", 24, 8+voffset, halign=:left, valign=:center)
-    line(Point(36, voffset-15), Point(42, voffset), :stroke)
-    line(Point(42, voffset), Point(36, voffset+15), :stroke)
-    line(Point(50, voffset), Point(600, voffset), :stroke)
-end
-
-function draw_gate(gate, xoffset, row)
+function draw_gate(gate, x, row)
+    xm = 70
+    y = yoffset(row)-15
     setcolor("white")
-    yoffset = (row-1) * row_height
-    rect(70+xoffset, 1+yoffset, 30, 30, :fill)
-    setline(1)
+    rect(xm+x, 1+y, 30, 30, :fill)
     setcolor("black")
-    rect(70+xoffset, 1+yoffset, 30, 30, :stroke)
+    rect(xm+x, 1+y, 30, 30, :stroke)
     fontface("Times Italic")
-    Luxor.text(gate, 85+xoffset, 24+yoffset, halign=:center, valign=:center)
+    Luxor.text(gate, xm+x+15, 24+y, halign=:center, valign=:center)
 end
 
 function draw_control_gate(gate, xoffset, row, control_locs, control_config)
@@ -72,7 +84,6 @@ function draw_oracle(gate, xoffset, row, height)
     yoffset = (row-1) * row_height
     yheight = (height-1) * row_height
     rect(70+xoffset, 1+yoffset, 40, yheight+30, :fill)
-    setline(1)
     setcolor("black")
     rect(70+xoffset, 1+yoffset, 40, yheight+30, :stroke)
     fontface("Times Italic")
